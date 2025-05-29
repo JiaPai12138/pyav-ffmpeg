@@ -42,14 +42,6 @@ codec_group = [
         build_parallel=plat != "Windows",
         when=When.community_only,
     ),
-    Package(
-        name="x265",
-        source_url="https://bitbucket.org/multicoreware/x265_git/downloads/x265_4.1.tar.gz",
-        sha256="a31699c6a89806b74b0151e5e6a7df65de4b49050482fe5ebf8a4379d7af8f29",
-        build_system="cmake",
-        source_dir="source",
-        when=When.community_only,
-    ),
 ]
 
 alsa_package = None
@@ -174,7 +166,7 @@ def main():
         )
 
     ffmpeg_package.build_arguments = [
-        # "--enable-alsa" if use_alsa else "--disable-alsa",
+        "--disable-alsa" if use_alsa else "--disable-alsa",
         "--disable-doc",
         "--disable-libtheora",
         "--disable-libfreetype",
@@ -182,28 +174,28 @@ def main():
         "--disable-libbluray",
         "--disable-libopenjpeg",
         (
-            "--enable-mediafoundation"
+            "--disable-mediafoundation"
             if plat == "Windows"
             else "--disable-mediafoundation"
         ),
-        # "--enable-gmp",
-        # "--enable-gnutls" if use_gnutls else "--disable-gnutls",
-        # "--enable-libaom",
-        # "--enable-libdav1d",
-        # "--enable-libmp3lame",
-        # "--enable-libopencore-amrnb" if community else "--disable-libopencore-amrnb",
-        # "--enable-libopencore-amrwb" if community else "--disable-libopencore-amrwb",
-        # "--enable-libopus",
-        # "--enable-libspeex",
+        "--disable-gmp",
+        "--disable-gnutls" if use_gnutls else "--disable-gnutls",
+        "--disable-libaom",
+        "--disable-libdav1d",
+        "--disable-libmp3lame",
+        "--disable-libopencore-amrnb" if community else "--disable-libopencore-amrnb",
+        "--disable-libopencore-amrwb" if community else "--disable-libopencore-amrwb",
+        "--disable-libopus",
+        "--disable-libspeex",
         "--enable-libsvtav1",
-        # "--enable-libsrt" if community else "--disable-libsrt",
-        # "--enable-libtwolame",
-        # "--enable-libvorbis",
-        # "--enable-libvpx",
-        # "--enable-libwebp",
-        # "--enable-libxcb" if plat == "Linux" else "--disable-libxcb",
-        # "--enable-libxml2" if community else "--disable-libxml2",
-        # "--enable-lzma",
+        "--disable-libsrt" if community else "--disable-libsrt",
+        "--disable-libtwolame",
+        "--disable-libvorbis",
+        "--disable-libvpx",
+        "--disable-libwebp",
+        "--disable-libxcb" if plat == "Linux" else "--disable-libxcb",
+        "--disable-libxml2" if community else "--disable-libxml2",
+        "--disable-lzma",
         "--enable-zlib",
         # "--enable-version3",
     ]
@@ -215,9 +207,10 @@ def main():
         ffmpeg_package.build_arguments.extend(
             [
                 "--enable-libx264",
-                "--enable-libx265",
-                # "--disable-libopenh264",
+                "--disable-libx265",
+                "--disable-libopenh264",
                 "--enable-gpl",
+                "--disable-libfdk_aac",
             ]
         )
     else:
@@ -225,17 +218,20 @@ def main():
             # ["--enable-libopenh264", "--disable-libx264", "--enable-libfdk_aac"]
             [
                 "--enable-libx264",
-                "--enable-libx265",
-                # "--disable-libopenh264",
+                "--disable-libx265",
+                "--disable-libopenh264",
                 "--enable-gpl",
+                "--disable-libfdk_aac",
             ]
         )
 
     if plat == "Darwin":
         ffmpeg_package.build_arguments.extend(
             [
-                "--enable-videotoolbox",
-                "--enable-audiotoolbox",
+                # "--enable-videotoolbox",
+                # "--enable-audiotoolbox",
+                "--disable-videotoolbox",
+                "--disable-audiotoolbox",
                 "--extra-ldflags=-Wl,-ld_classic",
             ]
         )
