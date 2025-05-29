@@ -21,193 +21,16 @@ def calculate_sha256(filename: str) -> str:
     return sha256_hash.hexdigest()
 
 
-library_group = [
-    Package(
-        name="xz",
-        source_url="https://github.com/tukaani-project/xz/releases/download/v5.6.3/xz-5.6.3.tar.xz",
-        sha256="db0590629b6f0fa36e74aea5f9731dc6f8df068ce7b7bafa45301832a5eebc3a",
-        build_arguments=[
-            "--disable-doc",
-            "--disable-lzma-links",
-            "--disable-lzmadec",
-            "--disable-lzmainfo",
-            "--disable-nls",
-            "--disable-scripts",
-            "--disable-xz",
-            "--disable-xzdec",
-        ],
-    ),
-    Package(
-        name="gmp",
-        source_url="https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz",
-        sha256="a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898",
-        # out-of-tree builds fail on Windows
-        build_dir=".",
-    ),
-    Package(
-        name="xml2",
-        source_url="https://download.gnome.org/sources/libxml2/2.14/libxml2-2.14.3.tar.xz",
-        sha256="6de55cacc8c2bc758f2ef6f93c313cb30e4dd5d84ac5d3c7ccbd9344d8cc6833",
-        requires=["xz"],
-        build_arguments=["--without-python"],
-    ),
-]
+library_group = []
 
-gnutls_group = [
-    Package(
-        name="unistring",
-        source_url="https://ftp.gnu.org/gnu/libunistring/libunistring-1.3.tar.gz",
-        sha256="8ea8ccf86c09dd801c8cac19878e804e54f707cf69884371130d20bde68386b7",
-    ),
-    Package(
-        name="nettle",
-        source_url="https://ftp.gnu.org/gnu/nettle/nettle-3.10.1.tar.gz",
-        sha256="b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132",
-        requires=["gmp"],
-        build_arguments=["--disable-documentation"],
-        # build randomly fails with "*** missing separator.  Stop."
-        build_parallel=False,
-    ),
-    Package(
-        name="gnutls",
-        source_url="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.8/gnutls-3.8.9.tar.xz",
-        sha256="69e113d802d1670c4d5ac1b99040b1f2d5c7c05daec5003813c049b5184820ed",
-        requires=["nettle", "unistring"],
-        build_arguments=[
-            "--disable-cxx",
-            "--disable-doc",
-            "--disable-guile",
-            "--disable-libdane",
-            "--disable-nls",
-            "--disable-tests",
-            "--disable-tools",
-            "--with-included-libtasn1",
-            "--without-p11-kit",
-        ],
-    ),
-]
+gnutls_group = []
 
 codec_group = [
-    Package(
-        name="aom",
-        source_url="https://storage.googleapis.com/aom-releases/libaom-3.11.0.tar.gz",
-        sha256="cf7d103d2798e512aca9c6e7353d7ebf8967ee96fffe9946e015bb9947903e3e",
-        requires=["cmake"],
-        source_strip_components=1,
-        build_system="cmake",
-        build_arguments=[
-            "-DENABLE_DOCS=0",
-            "-DENABLE_EXAMPLES=0",
-            "-DENABLE_TESTS=0",
-            "-DENABLE_TOOLS=0",
-        ],
-        build_parallel=False,
-    ),
-    Package(
-        name="dav1d",
-        source_url="https://code.videolan.org/videolan/dav1d/-/archive/1.5.1/dav1d-1.5.1.tar.bz2",
-        sha256="4eddffd108f098e307b93c9da57b6125224dc5877b1b3d157b31be6ae8f1f093",
-        requires=["meson", "nasm", "ninja"],
-        build_system="meson",
-    ),
     Package(
         name="libsvtav1",
         source_url="https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v3.0.1/SVT-AV1-v3.0.1.tar.bz2",
         sha256="f1d1ad8db551cd84ab52ae579b0e5086d8a0b7e47aea440e75907242a51b4cb9",
         build_system="cmake",
-    ),
-    Package(
-        name="lame",
-        source_url="http://deb.debian.org/debian/pool/main/l/lame/lame_3.100.orig.tar.gz",
-        sha256="ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e",
-    ),
-    Package(
-        name="ogg",
-        source_url="http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz",
-        sha256="0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664",
-    ),
-    Package(
-        name="opus",
-        source_url="https://github.com/xiph/opus/releases/download/v1.5.2/opus-1.5.2.tar.gz",
-        sha256="65c1d2f78b9f2fb20082c38cbe47c951ad5839345876e46941612ee87f9a7ce1",
-        build_arguments=["--disable-doc", "--disable-extra-programs"],
-    ),
-    Package(
-        name="speex",
-        source_url="http://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz",
-        sha256="4b44d4f2b38a370a2d98a78329fefc56a0cf93d1c1be70029217baae6628feea",
-        build_arguments=["--disable-binaries"],
-    ),
-    Package(
-        name="twolame",
-        source_url="http://deb.debian.org/debian/pool/main/t/twolame/twolame_0.4.0.orig.tar.gz",
-        sha256="cc35424f6019a88c6f52570b63e1baf50f62963a3eac52a03a800bb070d7c87d",
-        build_arguments=["--disable-sndfile"],
-    ),
-    Package(
-        name="vorbis",
-        source_url="https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-1.3.7.tar.xz",
-        sha256="b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b",
-        requires=["ogg"],
-    ),
-    Package(
-        name="vpx",
-        source_url="https://github.com/webmproject/libvpx/archive/v1.15.1.tar.gz",
-        sha256="6cba661b22a552bad729bd2b52df5f0d57d14b9789219d46d38f73c821d3a990",
-        source_filename="vpx-1.15.1.tar.gz",
-        build_arguments=[
-            "--disable-examples",
-            "--disable-tools",
-            "--disable-unit-tests",
-        ],
-    ),
-    Package(
-        name="png",
-        source_url="https://download.sourceforge.net/libpng/libpng-1.6.47.tar.gz",
-        sha256="084115c62fe023e3d88cd78764a4d8e89763985ee4b4a085825f7a00d85eafbb",
-        # avoid an assembler error on Windows
-        build_arguments=["PNG_COPTS=-fno-asynchronous-unwind-tables"],
-    ),
-    Package(
-        name="webp",
-        source_url="https://github.com/webmproject/libwebp/archive/refs/tags/v1.5.0.tar.gz",
-        sha256="668c9aba45565e24c27e17f7aaf7060a399f7f31dba6c97a044e1feacb930f37",
-        source_filename="webp-1.5.0.tar.gz",
-        build_system="cmake",
-        build_arguments=[
-            "-DWEBP_BUILD_ANIM_UTILS=OFF",
-            "-DWEBP_BUILD_CWEBP=OFF",
-            "-DWEBP_BUILD_DWEBP=OFF",
-            "-DWEBP_BUILD_GIF2WEBP=OFF",
-            "-DWEBP_BUILD_IMG2WEBP=OFF",
-            "-DWEBP_BUILD_VWEBP=OFF",
-            "-DWEBP_BUILD_WEBPINFO=OFF",
-            "-DWEBP_BUILD_WEBPMUX=OFF",
-            "-DWEBP_BUILD_BUILD_EXTRAS=OFF",
-        ],
-    ),
-    Package(
-        name="openh264",
-        source_url="https://github.com/cisco/openh264/archive/refs/tags/v2.6.0.tar.gz",
-        sha256="558544ad358283a7ab2930d69a9ceddf913f4a51ee9bf1bfb9e377322af81a69",
-        source_filename="openh264-2.6.0.tar.gz",
-        requires=["meson", "ninja"],
-        build_system="meson",
-    ),
-    Package(
-        name="fdk_aac",
-        source_url="https://github.com/mstorsjo/fdk-aac/archive/refs/tags/v2.0.3.tar.gz",
-        sha256="e25671cd96b10bad896aa42ab91a695a9e573395262baed4e4a2ff178d6a3a78",
-        when=When.commercial_only,
-        build_system="cmake",
-    ),
-    Package(
-        name="opencore-amr",
-        source_url="http://deb.debian.org/debian/pool/main/o/opencore-amr/opencore-amr_0.1.5.orig.tar.gz",
-        sha256="2c006cb9d5f651bfb5e60156dbff6af3c9d35c7bbcc9015308c0aff1e14cd341",
-        # parallel build hangs on Windows
-        build_parallel=plat != "Windows",
-        when=When.community_only,
     ),
     Package(
         name="x264",
@@ -227,28 +50,9 @@ codec_group = [
         source_dir="source",
         when=When.community_only,
     ),
-    Package(
-        name="srt",
-        source_url="https://github.com/Haivision/srt/archive/refs/tags/v1.5.4.tar.gz",
-        sha256="d0a8b600fe1b4eaaf6277530e3cfc8f15b8ce4035f16af4a5eb5d4b123640cdd",
-        build_system="cmake",
-        build_arguments=(
-            [r"-DOPENSSL_ROOT_DIR=C:\Program Files\OpenSSL"]
-            if plat == "Windows"
-            else ["-DENABLE_ENCRYPTION=OFF"]
-            if plat == "Darwin"
-            else [""]
-        ),
-        when=When.community_only,
-    ),
 ]
 
-alsa_package = Package(
-    name="alsa-lib",
-    source_url="https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.14.tar.bz2",
-    sha256="be9c88a0b3604367dd74167a2b754a35e142f670292ae47a2fdef27a2ee97a32",
-    build_arguments=["--disable-python"],
-)
+alsa_package = None
 
 nvheaders_package = Package(
     name="nv-codec-headers",
@@ -370,7 +174,7 @@ def main():
         )
 
     ffmpeg_package.build_arguments = [
-        "--enable-alsa" if use_alsa else "--disable-alsa",
+        # "--enable-alsa" if use_alsa else "--disable-alsa",
         "--disable-doc",
         "--disable-libtheora",
         "--disable-libfreetype",
@@ -382,26 +186,26 @@ def main():
             if plat == "Windows"
             else "--disable-mediafoundation"
         ),
-        "--enable-gmp",
-        "--enable-gnutls" if use_gnutls else "--disable-gnutls",
-        "--enable-libaom",
-        "--enable-libdav1d",
-        "--enable-libmp3lame",
-        "--enable-libopencore-amrnb" if community else "--disable-libopencore-amrnb",
-        "--enable-libopencore-amrwb" if community else "--disable-libopencore-amrwb",
-        "--enable-libopus",
-        "--enable-libspeex",
+        # "--enable-gmp",
+        # "--enable-gnutls" if use_gnutls else "--disable-gnutls",
+        # "--enable-libaom",
+        # "--enable-libdav1d",
+        # "--enable-libmp3lame",
+        # "--enable-libopencore-amrnb" if community else "--disable-libopencore-amrnb",
+        # "--enable-libopencore-amrwb" if community else "--disable-libopencore-amrwb",
+        # "--enable-libopus",
+        # "--enable-libspeex",
         "--enable-libsvtav1",
-        "--enable-libsrt" if community else "--disable-libsrt",
-        "--enable-libtwolame",
-        "--enable-libvorbis",
-        "--enable-libvpx",
-        "--enable-libwebp",
-        "--enable-libxcb" if plat == "Linux" else "--disable-libxcb",
-        "--enable-libxml2" if community else "--disable-libxml2",
-        "--enable-lzma",
+        # "--enable-libsrt" if community else "--disable-libsrt",
+        # "--enable-libtwolame",
+        # "--enable-libvorbis",
+        # "--enable-libvpx",
+        # "--enable-libwebp",
+        # "--enable-libxcb" if plat == "Linux" else "--disable-libxcb",
+        # "--enable-libxml2" if community else "--disable-libxml2",
+        # "--enable-lzma",
         "--enable-zlib",
-        "--enable-version3",
+        # "--enable-version3",
     ]
 
     if use_cuda:
@@ -412,13 +216,19 @@ def main():
             [
                 "--enable-libx264",
                 "--enable-libx265",
-                "--disable-libopenh264",
+                # "--disable-libopenh264",
                 "--enable-gpl",
             ]
         )
     else:
         ffmpeg_package.build_arguments.extend(
-            ["--enable-libopenh264", "--disable-libx264", "--enable-libfdk_aac"]
+            # ["--enable-libopenh264", "--disable-libx264", "--enable-libfdk_aac"]
+            [
+                "--enable-libx264",
+                "--enable-libx265",
+                # "--disable-libopenh264",
+                "--enable-gpl",
+            ]
         )
 
     if plat == "Darwin":
@@ -441,7 +251,7 @@ def main():
 
     packages = library_group[:]
     if use_alsa:
-        packages += [alsa_package]
+        packages += []  # alsa_package
     if use_cuda:
         packages += [nvheaders_package]
 
