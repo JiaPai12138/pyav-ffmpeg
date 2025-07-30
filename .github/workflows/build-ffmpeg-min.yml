@@ -12,6 +12,10 @@ on:
       - '**.md'
       - '**.rst'
       - '**.txt'
+  release:
+    types: [published, edited]
+  workflow_dispatch:
+
   workflow_dispatch:
 jobs:
   build:
