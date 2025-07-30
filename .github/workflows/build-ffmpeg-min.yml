@@ -15,8 +15,6 @@ on:
   release:
     types: [published, edited]
   workflow_dispatch:
-
-  workflow_dispatch:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
