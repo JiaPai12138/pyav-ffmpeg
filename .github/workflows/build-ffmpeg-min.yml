@@ -1,17 +1,5 @@
 name: build-ffmpeg-min
 on:
-  push:
-    branches: main
-    paths-ignore:
-      - '**.md'
-      - '**.rst'
-      - '**.txt'
-  pull_request:
-    branches: main
-    paths-ignore:
-      - '**.md'
-      - '**.rst'
-      - '**.txt'
   release:
     types: [published, edited]
   workflow_dispatch:
@@ -59,11 +47,11 @@ jobs:
         with:
           name: output-${{ matrix.os }}-${{ matrix.arch }}
           path: output/
-      - name: Create GitHub Release
+      - name: Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.run_number }}
-          name: Release ${{ github.run_number }}
+          tag_name: ${{ github.event.release.tag_name }}
+          name: ${{ github.event.release.name }}
           draft: false
           prerelease: false
           files: |
