@@ -173,8 +173,16 @@ def main():
         )
 
     ffmpeg_package.build_arguments = [
-        "--disable-alsa" if use_alsa else "--disable-alsa",
+        "--disable-programs",
+        "--disable-ffmpeg",
+        "--disable-ffplay",
+        "--disable-ffprobe",
         "--disable-doc",
+        "--disable-htmlpages",
+        "--disable-manpages",
+        "--disable-podpages",
+        "--disable-txtpages",
+        "--enable-version3",
         "--disable-libxml2",
         "--disable-lzma",  # or re-add xz package
         "--disable-libtheora",
@@ -182,28 +190,25 @@ def main():
         "--disable-libfontconfig",
         "--disable-libbluray",
         "--disable-libopenjpeg",
-        (
-            "--disable-mediafoundation"
-            if plat == "Windows"
-            else "--disable-mediafoundation"
-        ),
+        "--disable-mediafoundation",
         "--disable-gmp",
-        "--disable-gnutls" if use_gnutls else "--disable-gnutls",
+        "--disable-alsa",
+        "--disable-gnutls",
         "--disable-libaom",
         "--enable-libdav1d",
         "--disable-libmp3lame",
-        "--disable-libopencore-amrnb" if community else "--disable-libopencore-amrnb",
-        "--disable-libopencore-amrwb" if community else "--disable-libopencore-amrwb",
+        "--disable-libopencore-amrnb",
+        "--disable-libopencore-amrwb",
         "--disable-libopus",
         "--disable-libspeex",
         "--enable-libsvtav1",
-        "--disable-libsrt" if community else "--disable-libsrt",
+        "--disable-libsrt",
         "--disable-libtwolame",
         "--disable-libvorbis",
         "--disable-libvpx",
         "--disable-libwebp",
         "--disable-libopenh264",
-        "--disable-libxcb" if plat == "Linux" else "--disable-libxcb",
+        "--disable-libxcb",
         "--disable-zlib",
         "--enable-libx264",
         "--disable-libx265",
@@ -215,8 +220,8 @@ def main():
     if plat == "Darwin":
         ffmpeg_package.build_arguments.extend(
             [
-                "--disable-videotoolbox",
-                "--disable-audiotoolbox",
+                "--enable-videotoolbox",
+                "--enable-audiotoolbox",
                 "--extra-ldflags=-Wl,-ld_classic",
             ]
         )
@@ -232,7 +237,7 @@ def main():
 
     packages = library_group[:]
     if use_alsa:
-        packages += []  # alsa_package
+        packages += [alsa_package]
     if use_cuda:
         packages += [nvheaders_package]
 

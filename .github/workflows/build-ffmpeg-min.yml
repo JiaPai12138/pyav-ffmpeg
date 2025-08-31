@@ -3,9 +3,17 @@ on:
   release:
     types: [published, edited]
   workflow_dispatch:
+  pull_request:
+    branches: main
+    paths-ignore:
+      - '**.md'
+      - '**.rst'
+      - '**.txt'
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -15,20 +23,25 @@ jobs:
             shell: 'msys2 {0}'
             msys_prefix: mingw-w64-x86_64
             msys_system: MINGW64
+
     defaults:
       run:
         shell: ${{ matrix.shell }}
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+
       - uses: msys2/setup-msys2@v2
         if: matrix.os == 'windows-latest'
         with:
           install: base-devel openssl-devel ${{ matrix.msys_prefix }}-gcc ${{ matrix.msys_prefix }}-gperf ${{ matrix.msys_prefix }}-nasm
           msystem: ${{ matrix.msys_system }}
           path-type: inherit
+
       - name: Build FFmpeg
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
@@ -42,12 +55,15 @@ jobs:
           pip install cibuildwheel delvewheel
           cibuildwheel --output-dir output
           rm -f output/*.whl
+
       - name: Upload FFmpeg
         uses: actions/upload-artifact@v4
         with:
           name: output-${{ matrix.os }}-${{ matrix.arch }}
           path: output/
+
       - name: Update GitHub Release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.release.tag_name }}
