@@ -27,19 +27,6 @@ gnutls_group = []
 
 codec_group = [
     Package(
-        name="dav1d",
-        source_url="https://code.videolan.org/videolan/dav1d/-/archive/1.5.1/dav1d-1.5.1.tar.bz2",
-        sha256="4eddffd108f098e307b93c9da57b6125224dc5877b1b3d157b31be6ae8f1f093",
-        requires=["meson", "nasm", "ninja"],
-        build_system="meson",
-    ),
-    Package(
-        name="libsvtav1",
-        source_url="https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v3.1.0/SVT-AV1-v3.1.0.tar.bz2",
-        sha256="8231b63ea6c50bae46a019908786ebfa2696e5743487270538f3c25fddfa215a",
-        build_system="cmake",
-    ),
-    Package(
         name="x264",
         source_url="https://code.videolan.org/videolan/x264/-/archive/32c3b801191522961102d4bea292cdb61068d0dd/x264-32c3b801191522961102d4bea292cdb61068d0dd.tar.bz2",
         sha256="d7748f350127cea138ad97479c385c9a35a6f8527bc6ef7a52236777cf30b839",
@@ -173,7 +160,7 @@ def main():
         )
 
     ffmpeg_package.build_arguments = [
-        "--enable-small",
+        # "--enable-small",
         "--disable-programs",
         "--disable-ffmpeg",
         "--disable-ffplay",
@@ -239,6 +226,7 @@ def main():
             "--disable-demuxers",
             "--disable-protocols",
             "--disable-filters",
+            "--disable-debug",
         ]
     )
 

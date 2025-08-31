@@ -1,4 +1,4 @@
-name: build-ffmpeg-min
+name: build-ffmpeg-small
 on:
   release:
     types: [published, edited]
