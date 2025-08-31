@@ -160,7 +160,7 @@ def main():
         )
 
     ffmpeg_package.build_arguments = [
-        # "--enable-small",
+        "--enable-small",
         "--disable-programs",
         "--disable-ffmpeg",
         "--disable-ffplay",
