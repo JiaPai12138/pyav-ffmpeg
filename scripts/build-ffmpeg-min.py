@@ -25,31 +25,7 @@ library_group = []
 
 gnutls_group = []
 
-codec_group = [
-    Package(
-        name="dav1d",
-        source_url="https://code.videolan.org/videolan/dav1d/-/archive/1.5.1/dav1d-1.5.1.tar.bz2",
-        sha256="4eddffd108f098e307b93c9da57b6125224dc5877b1b3d157b31be6ae8f1f093",
-        requires=["meson", "nasm", "ninja"],
-        build_system="meson",
-    ),
-    Package(
-        name="libsvtav1",
-        source_url="https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v3.1.0/SVT-AV1-v3.1.0.tar.bz2",
-        sha256="8231b63ea6c50bae46a019908786ebfa2696e5743487270538f3c25fddfa215a",
-        build_system="cmake",
-    ),
-    Package(
-        name="x264",
-        source_url="https://code.videolan.org/videolan/x264/-/archive/32c3b801191522961102d4bea292cdb61068d0dd/x264-32c3b801191522961102d4bea292cdb61068d0dd.tar.bz2",
-        sha256="d7748f350127cea138ad97479c385c9a35a6f8527bc6ef7a52236777cf30b839",
-        # assembly contains textrels which are not supported by musl
-        build_arguments=["--disable-asm"] if is_musllinux else [],
-        # parallel build runs out of memory on Windows
-        build_parallel=plat != "Windows",
-        when=When.community_only,
-    ),
-]
+codec_group = []
 
 alsa_package = None
 
@@ -173,6 +149,7 @@ def main():
         )
 
     ffmpeg_package.build_arguments = [
+        # "--enable-small",
         "--disable-programs",
         "--disable-ffmpeg",
         "--disable-ffplay",
@@ -182,7 +159,7 @@ def main():
         "--disable-manpages",
         "--disable-podpages",
         "--disable-txtpages",
-        "--enable-version3",
+        "--disable-version3",
         "--disable-libxml2",
         "--disable-lzma",  # or re-add xz package
         "--disable-libtheora",
@@ -195,13 +172,13 @@ def main():
         "--disable-alsa",
         "--disable-gnutls",
         "--disable-libaom",
-        "--enable-libdav1d",
+        "--disable-libdav1d",
         "--disable-libmp3lame",
         "--disable-libopencore-amrnb",
         "--disable-libopencore-amrwb",
         "--disable-libopus",
         "--disable-libspeex",
-        "--enable-libsvtav1",
+        "--disable-libsvtav1",
         "--disable-libsrt",
         "--disable-libtwolame",
         "--disable-libvorbis",
@@ -210,12 +187,12 @@ def main():
         "--disable-libopenh264",
         "--disable-libxcb",
         "--disable-zlib",
-        "--enable-libx264",
+        "--disable-libx264",
         "--disable-libx265",
     ]
 
     if use_cuda:
-        ffmpeg_package.build_arguments.extend(["--enable-nvenc", "--enable-nvdec"])
+        ffmpeg_package.build_arguments.extend(["--enable-nvdec"])  # "--enable-nvenc"
 
     if plat == "Darwin":
         ffmpeg_package.build_arguments.extend(
@@ -231,7 +208,14 @@ def main():
             "--disable-encoder=avui,dca,mlp,opus,s302m,sonic,sonic_ls,truehd,vorbis",
             "--disable-decoder=sonic",
             "--disable-libjack",
-            "--disable-indev=jack",
+            "--disable-indevs",
+            "--disable-outdevs",
+            "--disable-bsfs",
+            "--disable-muxers",
+            "--disable-demuxers",
+            "--disable-protocols",
+            "--disable-filters",
+            "--disable-debug",
         ]
     )
 
