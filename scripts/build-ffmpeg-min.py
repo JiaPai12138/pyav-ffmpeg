@@ -192,7 +192,7 @@ def main():
     ]
 
     if use_cuda:
-        ffmpeg_package.build_arguments.extend(["--enable-nvdec"])  # "--enable-nvenc"
+        ffmpeg_package.build_arguments.extend(["--enable-nvenc", "--enable-nvdec"])
 
     if plat == "Darwin":
         ffmpeg_package.build_arguments.extend(
@@ -205,8 +205,10 @@ def main():
 
     ffmpeg_package.build_arguments.extend(
         [
-            "--disable-encoder=avui,dca,mlp,opus,s302m,sonic,sonic_ls,truehd,vorbis",
-            "--disable-decoder=sonic",
+            "--disable-encoders",
+            "--enable-encoder=h264_nvenc",
+            "--disable-decoders",
+            "--enable-decoder=h264,h264_cuvid",
             "--disable-libjack",
             "--disable-indevs",
             "--disable-outdevs",
