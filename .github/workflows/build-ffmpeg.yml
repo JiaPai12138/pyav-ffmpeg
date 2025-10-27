@@ -78,7 +78,7 @@ jobs:
           cibuildwheel --output-dir output
           rm -f output/*.whl
       - name: Upload FFmpeg
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: output-${{ matrix.os }}-${{ matrix.arch }}
           path: output/
