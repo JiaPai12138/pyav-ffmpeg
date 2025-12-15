@@ -57,7 +57,7 @@ jobs:
           rm -f output/*.whl
 
       - name: Upload FFmpeg
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: output-${{ matrix.os }}-${{ matrix.arch }}
           path: output/
